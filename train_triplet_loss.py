@@ -13,7 +13,7 @@ import pathlib
 def train_with_triplet_loss(query, epochs, batch_size, margin):
     
     # Create a directory to save your results
-    TRIPLET_RESULTS_DIRECTORY = f"triplet-results-{query.value}-query"
+    TRIPLET_RESULTS_DIRECTORY = os.path.join(f"results-{query.value}",f"triplet-results-{query.value}-query")
 
     #Create a directory to save your results
     if os.path.exists(TRIPLET_RESULTS_DIRECTORY): 

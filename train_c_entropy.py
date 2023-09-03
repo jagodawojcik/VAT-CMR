@@ -15,7 +15,7 @@ from logger import logger
 
 def train_with_cross_entropy(query, dominating_modality, epochs_pre, epochs_c_entropy, batch_size):
 
-    C_ENTROPY_RESULTS_DIRECTORY = f'c-entropy-results-{query.value}-query'
+    C_ENTROPY_RESULTS_DIRECTORY = os.path.join(f"results-{query.value}","c-entropy-results-{query.value}-query")
 
     #Create a directory to save your results
     if os.path.exists(C_ENTROPY_RESULTS_DIRECTORY): 
