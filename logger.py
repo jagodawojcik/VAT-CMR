@@ -8,7 +8,7 @@ class Logger:
         if self.use_echo:
             subprocess.run(['echo', message])
         else:
-            logger.log(message)
+            print(message)
 
 logger = Logger()
 
