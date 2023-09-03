@@ -60,6 +60,13 @@ if __name__ == "__main__":
 
     args.query_modality = QueryModality(args.query_modality)
     args.dominating_modality = DominatingModality(args.dominating_modality)
+    # Convert integer arguments
+    args.epoch_pretrain = int(args.epoch_pretrain)
+    args.epoch_c_entropy = int(args.epoch_c_entropy)
+    args.batch_size_c_entropy = int(args.batch_size_c_entropy)
+    args.epoch_triplet = int(args.epoch_triplet)
+    args.batch_size_triplet = int(args.batch_size_triplet)
+    args.margin_triplet = float(args.margin_triplet)
 
     # Set logger type
     logger.use_echo = args.use_linux_echo

@@ -26,10 +26,10 @@ def train_with_triplet_loss(query, epochs, batch_size, margin):
     logger.log(f"Training with {device}.")
 
     CURRENT_DIRECTORY = pathlib.Path(__file__).parent.resolve()
-    EMBEDDINGS_DIRECTORY = os.path.join(CURRENT_DIRECTORY, f'c-entropy-results-{query.value}-query')
+    EMBEDDINGS_DIRECTORY = os.path.join(CURRENT_DIRECTORY, ".." , f"results-{query.value}", f'c-entropy-results-{query.value}-query')
 
     # Load your embeddings
-    query_embeddings = np.load(os.path.join(EMBEDDINGS_DIRECTORY,f"{query.value}_embeddings_train.npy"), allow_pickle=True).item()
+    query_embeddings = np.load(os.path.join(EMBEDDINGS_DIRECTORY, f"{query.value}_embeddings_train.npy"), allow_pickle=True).item()
     fused_embeddings = np.load(os.path.join(EMBEDDINGS_DIRECTORY, "fused_embeddings_train.npy"), allow_pickle=True).item()
     query_embeddings_test = np.load(os.path.join(EMBEDDINGS_DIRECTORY,f"{query.value}_embeddings_test.npy"), allow_pickle=True).item()
     fused_embeddings_test = fused_embeddings = np.load(os.path.join(EMBEDDINGS_DIRECTORY, "fused_embeddings_test.npy"), allow_pickle=True).item()

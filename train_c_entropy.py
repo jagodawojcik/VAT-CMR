@@ -15,7 +15,7 @@ from logger import logger
 
 def train_with_cross_entropy(query, dominating_modality, epochs_pre, epochs_c_entropy, batch_size):
 
-    C_ENTROPY_RESULTS_DIRECTORY = os.path.join(f"results-{query.value}","c-entropy-results-{query.value}-query")
+    C_ENTROPY_RESULTS_DIRECTORY = os.path.join(f"results-{query.value}",f"c-entropy-results-{query.value}-query")
 
     #Create a directory to save your results
     if os.path.exists(C_ENTROPY_RESULTS_DIRECTORY): 
@@ -214,7 +214,7 @@ def train_with_cross_entropy(query, dominating_modality, epochs_pre, epochs_c_en
         dominating_modality_test_loss = total_test_loss_dominating_modality / len(test_loader) 
         dominating_modality_test_losses.append(dominating_modality_test_loss)  # dominating modality-specific loss
 
-        logger.log(f'Epoch {epoch}, Train Loss: {epoch_train_loss}, Test Loss: {test_loss}, {dominating_modality} Test Loss: {dominating_modality_test_loss}')
+        logger.log(f'Epoch {epoch}, Train Loss: {epoch_train_loss}, Test Loss: {test_loss}, {dominating_modality.value} Test Loss: {dominating_modality_test_loss}')
 
 
     # Save the embeddings after all epochs
