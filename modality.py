@@ -6,7 +6,10 @@ class QueryModality(Enum):
     TACTILE = 'tactile'
     AUDIO = 'audio'
 
-class DominatingModality(QueryModality):
+class DominatingModality(Enum):
+    VISUAL = 'visual'
+    TACTILE = 'tactile'
+    AUDIO = 'audio'
     JOINT = 'joint_embedding'
 
 
