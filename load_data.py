@@ -71,7 +71,7 @@ def fetch_data():
                 label_train.append(object_number)
 
     for object_number in OBJECT_NUMBERS:
-        folder_dir = f"{DATASET_DIRECTORY}/audio/test/{object_number}"
+        folder_dir = f"{DATASET_DIRECTORY}/audio/val/{object_number}"
         for audio_files in os.listdir(folder_dir):
             # check if the file ends with wav
             if (audio_files.endswith(".wav")):
@@ -95,7 +95,7 @@ def fetch_data():
  
 
     for object_number in OBJECT_NUMBERS:
-        folder_dir = f"{DATASET_DIRECTORY}/touch/test/{object_number}"
+        folder_dir = f"{DATASET_DIRECTORY}/touch/val/{object_number}"
         for images in os.listdir(folder_dir):
             # check if the image ends with png
             if (images.endswith(".png")):
@@ -117,7 +117,7 @@ def fetch_data():
                 visual_train.append(img_tensor)
  
     for object_number in OBJECT_NUMBERS:
-        folder_dir = f"{DATASET_DIRECTORY}/vision/test/{object_number}"
+        folder_dir = f"{DATASET_DIRECTORY}/vision/val/{object_number}"
         for images in os.listdir(folder_dir):
             # check if the image ends with png
             if (images.endswith(".png")):
@@ -130,6 +130,59 @@ def fetch_data():
     logger.log("Finished loading the train and validation dataset.")
 
     return audio_train, audio_test, tactile_train, tactile_test, visual_train, visual_test, label_train, label_test
+
+def fetch_test_data():
+    logger.log("Start loading the test dataset.")
+    TARGET_SIZE = (246, 246)
+
+    audio_test = []
+    tactile_test = []
+    visual_test = []
+    label_test = []
+
+    normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                     std=[0.229, 0.224, 0.225])
+
+    transform = transforms.Compose([transforms.Resize(TARGET_SIZE),
+                                    transforms.ToTensor(),
+                                    normalize])
+
+    for object_number in OBJECT_NUMBERS:
+        folder_dir = f"{DATASET_DIRECTORY}/audio/test/{object_number}"
+        for audio_files in os.listdir(folder_dir):
+            # check if the file ends with wav
+            if (audio_files.endswith(".wav")):
+                # load the audio
+                audio, _ = librosa.load(os.path.join(folder_dir, audio_files), sr=None)
+                audio = torch.tensor(audio).unsqueeze(0)  # Add a dimension for the channel
+                audio_test.append(torch.tensor(audio))
+                label_test.append(object_number)
+
+    for object_number in OBJECT_NUMBERS:
+        folder_dir = f"{DATASET_DIRECTORY}/touch/test/{object_number}"
+        for images in os.listdir(folder_dir):
+            # check if the image ends with png
+            if (images.endswith(".png")):
+                # load the image
+                img = Image.open(os.path.join(folder_dir, images))
+                # apply transformations
+                img_tensor = transform(img)
+                tactile_test.append(img_tensor)
+    
+    for object_number in OBJECT_NUMBERS:
+        folder_dir = f"{DATASET_DIRECTORY}/vision/test/{object_number}"
+        for images in os.listdir(folder_dir):
+            # check if the image ends with png
+            if (images.endswith(".png")):
+                # load the image
+                img = Image.open(os.path.join(folder_dir, images))
+                # apply transformations
+                img_tensor = transform(img)
+                visual_test.append(img_tensor)
+
+    logger.log("Finished loading the test dataset.")
+
+    return audio_test, tactile_test, visual_test, label_test
 
 
 def get_loader(batch_size):
@@ -159,3 +212,18 @@ def get_loader(batch_size):
                   for x in ['train', 'test']}
 
     return dataloader
+
+def get_test_loader(batch_size):
+    audio_test, tactile_test, visual_test, label_test = fetch_test_data()
+
+    logger.log(f"There is audio: {len(audio_test)} test examples;")
+    logger.log(f"There is touch: {len(tactile_test)} test examples;")
+    logger.log(f"There is vision: {len(visual_test)} test examples;")
+
+    encoder = LabelEncoder()
+    label_test = encoder.fit_transform(label_test)
+
+    test_dataset = CustomDataSet(audio=audio_test, tactile=tactile_test, visual=visual_test, labels=label_test)
+    test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=0)
+
+    return test_dataloader

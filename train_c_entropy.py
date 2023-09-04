@@ -15,7 +15,7 @@ from logger import logger
 
 def train_with_cross_entropy(query, dominating_modality, epochs_pre, epochs_c_entropy, batch_size):
 
-    C_ENTROPY_RESULTS_DIRECTORY = os.path.join(f"results-{query.value}",f"c-entropy-results-{query.value}-query")
+    C_ENTROPY_RESULTS_DIRECTORY = os.path.join(f"Triple-CMR-query-{query.value}",f"c-entropy-results-{query.value}-query")
 
     #Create a directory to save your results
     if os.path.exists(C_ENTROPY_RESULTS_DIRECTORY): 
@@ -86,7 +86,7 @@ def train_with_cross_entropy(query, dominating_modality, epochs_pre, epochs_c_en
 
         test_loss = total_test_loss/len(test_loader)
         test_losses.append(test_loss)
-        logger.log(f'Pretraining Epoch {epoch}, Test Loss: {test_loss}')
+        logger.log(f'Pretraining Epoch {epoch}, Validation Loss: {test_loss}')
 
     # Save the model
     torch.save(tactile_network.state_dict(), f"{C_ENTROPY_RESULTS_DIRECTORY}/tactile_model_pretrain.pth")
@@ -94,8 +94,8 @@ def train_with_cross_entropy(query, dominating_modality, epochs_pre, epochs_c_en
     # Plot train and test loss
     plt.figure(figsize=(10, 5))
     plt.plot(train_losses, label='Training loss')
-    plt.plot(test_losses, label='Test loss')
-    plt.title('Pretraining Tactile Branch: Train and Test Loss over time', fontsize=18)
+    plt.plot(test_losses, label='Validation loss')
+    plt.title('Pretraining Tactile Branch: Train and Validation Loss over time', fontsize=18)
     plt.ylabel('Loss', fontsize=18)
     plt.xlabel('Epochs', fontsize=18)
     plt.xticks(fontsize=16)
@@ -214,7 +214,7 @@ def train_with_cross_entropy(query, dominating_modality, epochs_pre, epochs_c_en
         dominating_modality_test_loss = total_test_loss_dominating_modality / len(test_loader) 
         dominating_modality_test_losses.append(dominating_modality_test_loss)  # dominating modality-specific loss
 
-        logger.log(f'Epoch {epoch}, Train Loss: {epoch_train_loss}, Test Loss: {test_loss}, {dominating_modality.value} Test Loss: {dominating_modality_test_loss}')
+        logger.log(f'Epoch {epoch}, Train Loss: {epoch_train_loss}, Validation Loss (joint embedding): {test_loss}, {dominating_modality.value} Validation Loss (dominating modality): {dominating_modality_test_loss}')
 
 
     # Save the embeddings after all epochs
@@ -239,9 +239,9 @@ def train_with_cross_entropy(query, dominating_modality, epochs_pre, epochs_c_en
     # After training, plot the losses
     plt.figure(figsize=(10, 5))
     plt.plot(train_losses, label='Train Loss')
-    plt.plot(test_losses, label='Test Loss')
+    plt.plot(test_losses, label='Validation Loss')
 
-    plt.title('Cross-Entropy Training: Train and Test Loss over time', fontsize=18)
+    plt.title('Cross-Entropy Training: Train and Validation Loss over time', fontsize=18)
 
     plt.xlabel('Epochs', fontsize=18)
     plt.ylabel('Loss', fontsize=18)
