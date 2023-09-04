@@ -91,7 +91,8 @@ Set logging type as True for Linux echo print or False for standard Python print
 ## Experimental Results
 
 ### Dataset
-Dataset used in a set of experiments conducted in Triple-CMR study consists of visual, audio and tactile representations of 20 objects, with the following distribution:
+Link to dataset: [here](https://drive.google.com/drive/folders/1tUKbRt5QgVkjYPtqwllNBinv4hjf9rzW?usp=drive_link).
+Dataset used in a set of experiments conducted in Triple-CMR study consists of visual, audio and tactile representations of 20 objects, has the following distribution.
 
 | Data Type       | Number of Images |
 |-----------------|------------------|
@@ -101,7 +102,7 @@ Dataset used in a set of experiments conducted in Triple-CMR study consists of v
 | Validation      | 4,500            |
 | Test & Evaluation | 4,500          |
 
-Dataset was generated from ObjectFolder 2.0 Dataset created by R. Gao et al., available here https://github.com/rhgao/ObjectFolder.
+Dataset was generated from ObjectFolder 2.0 Dataset created by R. Gao et al., code available here https://github.com/rhgao/ObjectFolder.
 
 ### Results
 
@@ -109,4 +110,4 @@ Include results.
 
 ## License
 
-Include license info.
+This project is licensed under the MIT License. For more details, see the [LICENSE](LICENSE) file in the repository.
