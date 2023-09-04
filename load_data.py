@@ -28,9 +28,6 @@ class CustomDataSet(Dataset):
         tac = self.tactile[index]
         vis = self.visual[index]
         lab = self.labels[index]
-        # logger.log(str(aud.shape))
-        # logger.log(str(tac.shape))
-        # logger.log(str(vis.shape))
         return aud, tac, vis, lab
 
     def __len__(self):
@@ -151,7 +148,7 @@ def fetch_test_data():
                                     transforms.ToTensor(),
                                     normalize])
 
-    TARGET_LENGTH = 132300  # This is the length you want each audio clip to have
+    TARGET_LENGTH = 132300 
 
     for object_number in OBJECT_NUMBERS:
         folder_dir = f"{DATASET_DIRECTORY}/audio/test/{object_number}"
@@ -161,15 +158,10 @@ def fetch_test_data():
                 audio_len = len(audio)
 
                 if audio_len > TARGET_LENGTH:
-                    # Truncate the excess
-                    audio = audio[:TARGET_LENGTH]
-                    # print(f"Truncated audio for object {object_number}, file {audio_files}. Original length: {audio_len}")
-
+                    audio = audio[:TARGET_LENGTH] # Truncate the excess
                 elif audio_len < TARGET_LENGTH:
-                    # Pad zeros
                     pad_size = TARGET_LENGTH - audio_len
-                    audio = np.pad(audio, (0, pad_size), 'constant')
-                    # print(f"Padded audio for object {object_number}, file {audio_files}. Original length: {audio_len}")
+                    audio = np.pad(audio, (0, pad_size), 'constant') # Pad zeros
 
                 audio = torch.tensor(audio).unsqueeze(0)  # Add a dimension for the channel
                 audio_test.append(audio)
