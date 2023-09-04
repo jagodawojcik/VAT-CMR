@@ -223,7 +223,15 @@ def get_test_loader(batch_size):
     encoder = LabelEncoder()
     label_test = encoder.fit_transform(label_test)
 
-    test_dataset = CustomDataSet(audio=audio_test, tactile=tactile_test, visual=visual_test, labels=label_test)
-    test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=0)
+    audio = {'test': audio_test}
+    tactile = {'test': tactile_test}
+    visual = {'test': visual_test}
+    labels = {'test': label_test}
+
+    test_dataset = {x: CustomDataSet(audio=audio[x], tactile=tactile[x], visual=visual[x], labels=labels[x]) 
+               for x in ['test']}
+    shuffle = {'test': False}
+    test_dataloader = {x: DataLoader(test_dataset[x], batch_size=batch_size, shuffle=shuffle[x], num_workers=0) 
+                  for x in ['test']}
 
     return test_dataloader

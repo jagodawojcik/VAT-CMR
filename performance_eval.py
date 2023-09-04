@@ -29,8 +29,9 @@ def test_set_performance_evaluate(query):
     model.eval()
 
     # Initialize test dataloader
-    batch_size = 5
-    test_loader = get_test_loader(batch_size)
+    batch_size = 5  
+    dataloader = get_test_loader(batch_size)
+    test_loader = dataloader['test']
 
     # Dictionaries to save embeddings
     audio_embeddings_test = defaultdict(list)
