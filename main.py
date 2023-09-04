@@ -3,7 +3,7 @@ from train_triplet_loss import train_with_triplet_loss
 from performance_eval import test_set_performance_evaluate
 from logger import logger
 from modality import QueryModality, DominatingModality
-
+import warnings
 import argparse
 import os
 
@@ -18,6 +18,8 @@ MARGIN = 0.5
 
 
 def main(args):
+    # Ignore user type of warnings
+    warnings.filterwarnings("ignore", category=UserWarning)
 
     RESULTS_DIRECTORY = f'Triple-CMR-query-{args.query_modality.value}'
 
@@ -37,7 +39,7 @@ def main(args):
     train_with_cross_entropy(query=args.query_modality, dominating_modality=args.dominating_modality, epochs_pre=args.epoch_pretrain, epochs_c_entropy=args.epoch_c_entropy, batch_size=args.batch_size_c_entropy)
     logger.log("-----------Cross Entropy Training Completed-----------")
 
-    logger.log("----------Starting Triplet Loss Training and Evaluation-----------")
+    logger.log("----------Starting Triplet Loss Training-----------")
     train_with_triplet_loss(query=args.query_modality, epochs=args.epoch_triplet, batch_size=args.batch_size_triplet, margin=args.margin_triplet)
     logger.log("----------Triplet Loss Training Completed-----------")
 
