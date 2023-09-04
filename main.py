@@ -1,5 +1,6 @@
 from train_c_entropy import train_with_cross_entropy
 from train_triplet_loss import train_with_triplet_loss
+from performance_eval import test_set_performance_evaluate
 from logger import logger
 from modality import QueryModality, DominatingModality
 
@@ -40,6 +41,9 @@ def main(args):
     train_with_triplet_loss(query=args.query_modality, epochs=args.epoch_triplet, batch_size=args.batch_size_triplet, margin=args.margin_triplet)
     logger.log("----------Triplet Loss Training Completed-----------")
 
+    logger.log(("-----------Start Final Performance Evaluation-----------"))
+    test_set_performance_evaluate(query=args.query_modality)
+    logger.log(("-----------Performance Evaluation Completed-----------"))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Process different modes and set parameters')

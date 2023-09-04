@@ -32,7 +32,7 @@ def train_with_triplet_loss(query, epochs, batch_size, margin):
     query_embeddings = np.load(os.path.join(EMBEDDINGS_DIRECTORY, f"{query.value}_embeddings_train.npy"), allow_pickle=True).item()
     fused_embeddings = np.load(os.path.join(EMBEDDINGS_DIRECTORY, "fused_embeddings_train.npy"), allow_pickle=True).item()
     query_embeddings_test = np.load(os.path.join(EMBEDDINGS_DIRECTORY,f"{query.value}_embeddings_test.npy"), allow_pickle=True).item()
-    fused_embeddings_test = fused_embeddings = np.load(os.path.join(EMBEDDINGS_DIRECTORY, "fused_embeddings_test.npy"), allow_pickle=True).item()
+    fused_embeddings_test = np.load(os.path.join(EMBEDDINGS_DIRECTORY, "fused_embeddings_test.npy"), allow_pickle=True).item()
 
     # Instantiate your dataset and dataloader
     triplet_dataset = TripletDataset(query_embeddings, fused_embeddings)
