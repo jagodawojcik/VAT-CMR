@@ -23,17 +23,17 @@ def main(args):
 
     RESULTS_DIRECTORY = f'Triple-CMR-query-{args.query_modality.value}'
 
-    #Create a directory to save your results
-    if os.path.exists(RESULTS_DIRECTORY): 
-        raise Exception(f"Directory {RESULTS_DIRECTORY} already exists, please check for existing results.")
+    # #Create a directory to save your results
+    # if os.path.exists(RESULTS_DIRECTORY): 
+    #     raise Exception(f"Directory {RESULTS_DIRECTORY} already exists, please check for existing results.")
 
-    logger.log(f"Directory {RESULTS_DIRECTORY} does not exist, creating...")
-    os.makedirs(RESULTS_DIRECTORY)
+    # logger.log(f"Directory {RESULTS_DIRECTORY} does not exist, creating...")
+    # os.makedirs(RESULTS_DIRECTORY)
 
-    with open(f"{RESULTS_DIRECTORY}/information.txt", "w") as file:
-        file.write(f"Training Triple-CMR Model.")
-        file.write(f"\nQuery Modality: {args.query_modality.value}")
-        file.write(f"\nClassifiaction with {args.dominating_modality.value}.")
+    # with open(f"{RESULTS_DIRECTORY}/information.txt", "w") as file:
+    #     file.write(f"Training Triple-CMR Model.")
+    #     file.write(f"\nQuery Modality: {args.query_modality.value}")
+    #     file.write(f"\nClassifiaction with {args.dominating_modality.value}.")
 
     # logger.log("---------Starting Cross Entropy Training-----------")
     # train_with_cross_entropy(query=args.query_modality, dominating_modality=args.dominating_modality, epochs_pre=args.epoch_pretrain, epochs_c_entropy=args.epoch_c_entropy, batch_size=args.batch_size_c_entropy)
