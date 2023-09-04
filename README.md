@@ -96,7 +96,7 @@ Dataset used in a set of experiments conducted in Triple-CMR study consists of v
 | Data Type       | Number of Images |
 |-----------------|------------------|
 | Total           | 34,500           |
-|*From which*:
+*From which*:
 | Training        | 25,500           |
 | Validation      | 4,500            |
 | Test & Evaluation | 4,500          |
