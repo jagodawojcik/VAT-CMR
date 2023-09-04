@@ -27,6 +27,9 @@ class CustomDataSet(Dataset):
         tac = self.tactile[index]
         vis = self.visual[index]
         lab = self.labels[index]
+        logger.log(aud.shape)
+        logger.log(tac.shape)
+        logger.log(vis.shape)
         return aud, tac, vis, lab
 
     def __len__(self):
