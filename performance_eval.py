@@ -14,8 +14,16 @@ def test_set_performance_evaluate(query):
     
     # Initialize results directory
     FINAL_EVALUATION_RESULTS_DIRECTORY = os.path.join(f"Triple-CMR-query-{query.value}",f"performance-evaluation-results")
+
+    #Create a directory to save your results
+    if os.path.exists(FINAL_EVALUATION_RESULTS_DIRECTORY): 
+        raise Exception(f"Directory {FINAL_EVALUATION_RESULTS_DIRECTORY} already exists, please check for existing results.")
+    
+    logger.log(f"Directory {FINAL_EVALUATION_RESULTS_DIRECTORY} does not exist, creating...")
+    os.makedirs(FINAL_EVALUATION_RESULTS_DIRECTORY)
+
     C_ENTROPY_RESULTS_DIRECTORY = os.path.join(f"Triple-CMR-query-{query.value}",f"c-entropy-results-{query.value}-query")
-    TRIPLET_RESULTS_DIRECTORY = os.path.join(f"Triple-CMR-query-{query.value}",f"results-{query.value}",f"triplet-results-{query.value}-query")
+    TRIPLET_RESULTS_DIRECTORY = os.path.join(f"Triple-CMR-query-{query.value}",f"triplet-results-{query.value}-query")
 
     # Load saved model paths 
     saved_c_entropy_model_path = f"{C_ENTROPY_RESULTS_DIRECTORY}/c-entropy-model.pth"
@@ -76,7 +84,7 @@ def test_set_performance_evaluate(query):
 
     # Load retrieval space embeddings
     retrieval_query_embeddings = np.load(os.path.join(C_ENTROPY_RESULTS_DIRECTORY, f"{query.value}_embeddings_train.npy"), allow_pickle=True).item()
-    retrieval_fused_emebddings = np.load(os.path.join(TRIPLET_RESULTS_DIRECTORY, f"fused_embeddings_train.npy"), allow_pickle=True).item()
+    retrieval_fused_emebddings = np.load(os.path.join(C_ENTROPY_RESULTS_DIRECTORY, f"fused_embeddings_train.npy"), allow_pickle=True).item()
 
     with torch.no_grad():
         new_retrieval_query_embeddings = {k: model(torch.tensor(v, device=device)).detach().cpu().numpy() for k, v in retrieval_query_embeddings.items()}

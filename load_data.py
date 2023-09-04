@@ -9,6 +9,7 @@ from sklearn.preprocessing import LabelEncoder
 import pathlib
 import torch
 import librosa
+import numpy as np
 
 CURRENT_DIRECTORY = pathlib.Path(__file__).parent.resolve()
 DATASET_DIRECTORY = os.path.join(CURRENT_DIRECTORY, "..", "data")
@@ -27,9 +28,9 @@ class CustomDataSet(Dataset):
         tac = self.tactile[index]
         vis = self.visual[index]
         lab = self.labels[index]
-        logger.log(aud.shape)
-        logger.log(tac.shape)
-        logger.log(vis.shape)
+        # logger.log(str(aud.shape))
+        # logger.log(str(tac.shape))
+        # logger.log(str(vis.shape))
         return aud, tac, vis, lab
 
     def __len__(self):
@@ -150,16 +151,30 @@ def fetch_test_data():
                                     transforms.ToTensor(),
                                     normalize])
 
+    TARGET_LENGTH = 132300  # This is the length you want each audio clip to have
+
     for object_number in OBJECT_NUMBERS:
         folder_dir = f"{DATASET_DIRECTORY}/audio/test/{object_number}"
         for audio_files in os.listdir(folder_dir):
-            # check if the file ends with wav
-            if (audio_files.endswith(".wav")):
-                # load the audio
+            if audio_files.endswith(".wav"):
                 audio, _ = librosa.load(os.path.join(folder_dir, audio_files), sr=None)
+                audio_len = len(audio)
+
+                if audio_len > TARGET_LENGTH:
+                    # Truncate the excess
+                    audio = audio[:TARGET_LENGTH]
+                    # print(f"Truncated audio for object {object_number}, file {audio_files}. Original length: {audio_len}")
+
+                elif audio_len < TARGET_LENGTH:
+                    # Pad zeros
+                    pad_size = TARGET_LENGTH - audio_len
+                    audio = np.pad(audio, (0, pad_size), 'constant')
+                    # print(f"Padded audio for object {object_number}, file {audio_files}. Original length: {audio_len}")
+
                 audio = torch.tensor(audio).unsqueeze(0)  # Add a dimension for the channel
-                audio_test.append(torch.tensor(audio))
+                audio_test.append(audio)
                 label_test.append(object_number)
+
 
     for object_number in OBJECT_NUMBERS:
         folder_dir = f"{DATASET_DIRECTORY}/touch/test/{object_number}"
