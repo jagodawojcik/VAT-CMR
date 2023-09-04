@@ -30,8 +30,7 @@ def test_set_performance_evaluate(query):
 
     # Initialize test dataloader
     batch_size = 32  
-    dataloader = get_test_loader(batch_size)
-    test_loader = dataloader['test']
+    test_loader = get_test_loader(batch_size)
 
     # Dictionaries to save embeddings
     audio_embeddings_test = defaultdict(list)
