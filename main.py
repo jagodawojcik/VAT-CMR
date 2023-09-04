@@ -18,7 +18,7 @@ MARGIN = 0.5
 
 def main(args):
 
-    RESULTS_DIRECTORY = f'results-{args.query_modality.value}'
+    RESULTS_DIRECTORY = f'Triple-CMR-query-{args.query_modality.value}'
 
     #Create a directory to save your results
     if os.path.exists(RESULTS_DIRECTORY): 
