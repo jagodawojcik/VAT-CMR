@@ -29,7 +29,7 @@ def test_set_performance_evaluate(query):
     model.eval()
 
     # Initialize test dataloader
-    batch_size = 32  
+    batch_size = 5
     test_loader = get_test_loader(batch_size)
 
     # Dictionaries to save embeddings
