@@ -15,7 +15,7 @@ from logger import logger
 
 def train_with_cross_entropy(query, dominating_modality, epochs_pre, epochs_c_entropy, batch_size):
 
-    C_ENTROPY_RESULTS_DIRECTORY = os.path.join(f"Triple-CMR-query-{query.value}",f"c-entropy-results-{query.value}-query")
+    C_ENTROPY_RESULTS_DIRECTORY = os.path.join(f"Triple-CMR-query-{query.value}-dom-{dominating_modality.value}",f"c-entropy-results-{query.value}-query")
 
     #Create a directory to save your results
     if os.path.exists(C_ENTROPY_RESULTS_DIRECTORY): 
@@ -258,4 +258,3 @@ def train_with_cross_entropy(query, dominating_modality, epochs_pre, epochs_c_en
 
     # Display the plot
     plt.show()
-

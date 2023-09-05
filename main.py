@@ -21,7 +21,7 @@ def main(args):
     # Ignore user type of warnings
     warnings.filterwarnings("ignore", category=UserWarning)
 
-    RESULTS_DIRECTORY = f'Triple-CMR-query-{args.query_modality.value}'
+    RESULTS_DIRECTORY = f'Triple-CMR-query-{args.query_modality.value}-dom-{args.dominating_modality.value}'
 
     #Create a directory to save your results
     if os.path.exists(RESULTS_DIRECTORY): 
@@ -33,18 +33,18 @@ def main(args):
     with open(f"{RESULTS_DIRECTORY}/information.txt", "w") as file:
         file.write(f"Training Triple-CMR Model.")
         file.write(f"\nQuery Modality: {args.query_modality.value}")
-        file.write(f"\nClassifiaction with {args.dominating_modality.value}.")
+        file.write(f"\nClassifiaction with {args.dominating_modality.value} dominating modality.")
 
     logger.log("---------Starting Cross Entropy Training-----------")
     train_with_cross_entropy(query=args.query_modality, dominating_modality=args.dominating_modality, epochs_pre=args.epoch_pretrain, epochs_c_entropy=args.epoch_c_entropy, batch_size=args.batch_size_c_entropy)
     logger.log("-----------Cross Entropy Training Completed-----------")
 
     logger.log("----------Starting Triplet Loss Training-----------")
-    train_with_triplet_loss(query=args.query_modality, epochs=args.epoch_triplet, batch_size=args.batch_size_triplet, margin=args.margin_triplet)
+    train_with_triplet_loss(query=args.query_modality, dominating=args.dominating_modality, epochs=args.epoch_triplet, batch_size=args.batch_size_triplet, margin=args.margin_triplet)
     logger.log("----------Triplet Loss Training Completed-----------")
 
     logger.log(("-----------Start Final Performance Evaluation-----------"))
-    test_set_performance_evaluate(query=args.query_modality)
+    test_set_performance_evaluate(query=args.query_modality, dominating_modality=args.dominating_modality)
     logger.log(("-----------Performance Evaluation Completed-----------"))
 
 if __name__ == "__main__":

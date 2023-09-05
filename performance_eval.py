@@ -8,12 +8,12 @@ from load_data import get_test_loader
 from model import CrossSensoryNetwork, EmbeddingNet
 from evaluation import evaluate
 
-def test_set_performance_evaluate(query):
+def test_set_performance_evaluate(query, dominating_modality):
 
     logger.log("Start final performance evaluation on a test set.")
     
     # Initialize results directory
-    FINAL_EVALUATION_RESULTS_DIRECTORY = os.path.join(f"Triple-CMR-query-{query.value}",f"performance-evaluation-results")
+    FINAL_EVALUATION_RESULTS_DIRECTORY = os.path.join(f"Triple-CMR-query-{query.value}-dom-{dominating_modality.value}",f"performance-evaluation-results")
 
     #Create a directory to save your results
     if os.path.exists(FINAL_EVALUATION_RESULTS_DIRECTORY): 
@@ -22,12 +22,12 @@ def test_set_performance_evaluate(query):
     logger.log(f"Directory {FINAL_EVALUATION_RESULTS_DIRECTORY} does not exist, creating...")
     os.makedirs(FINAL_EVALUATION_RESULTS_DIRECTORY)
 
-    C_ENTROPY_RESULTS_DIRECTORY = os.path.join(f"Triple-CMR-query-{query.value}",f"c-entropy-results-{query.value}-query")
-    TRIPLET_RESULTS_DIRECTORY = os.path.join(f"Triple-CMR-query-{query.value}",f"triplet-results-{query.value}-query")
+    C_ENTROPY_RESULTS_DIRECTORY = os.path.join(f"Triple-CMR-query-{query.value}-dom-{dominating_modality.value}",f"c-entropy-results-{query.value}-query")
+    TRIPLET_RESULTS_DIRECTORY = os.path.join(f"Triple-CMR-query-{query.value}-dom-{dominating_modality.value}",f"triplet-results-{query.value}-query")
 
     # Load saved model paths 
     saved_c_entropy_model_path = f"{C_ENTROPY_RESULTS_DIRECTORY}/c-entropy-model.pth"
-    saved_triplet_model_path_query_fused = f"{TRIPLET_RESULTS_DIRECTORY}/model_best_query2fused.pth"
+    saved_triplet_model_path_query_fused = f"{TRIPLET_RESULTS_DIRECTORY}/triplet_model_best.pth"
 
     # Device to cuda
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -96,3 +96,10 @@ def test_set_performance_evaluate(query):
     logger.log("Finished evaluation of final performance.")
     logger.log(f"MAP Query Modality to Fused: {MAP_query2fused}")
     logger.log(f"MAP Fused Modality to Query: {MAP_fused2query}")
+
+    RESULTS_DIRECTORY = f'Triple-CMR-query-{query.value}-dom-{dominating_modality.value}'
+
+    with open(f"{RESULTS_DIRECTORY}/information.txt", "a") as file:
+        file.write(f"MAP Query Modality to Fused: {MAP_query2fused}")
+        file.write(f"MAP Fused to Initial Query: {MAP_fused2query}")
+        

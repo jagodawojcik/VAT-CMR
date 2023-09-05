@@ -10,10 +10,10 @@ import json
 import os
 import pathlib
 
-def train_with_triplet_loss(query, epochs, batch_size, margin):
+def train_with_triplet_loss(query, dominating, epochs, batch_size, margin):
     
     # Create a directory to save your results
-    TRIPLET_RESULTS_DIRECTORY = os.path.join(f"Triple-CMR-query-{query.value}",f"triplet-results-{query.value}-query")
+    TRIPLET_RESULTS_DIRECTORY = os.path.join(f"Triple-CMR-query-{query.value}-dom-{dominating.value}",f"triplet-results-{query.value}-query")
 
     #Create a directory to save your results
     if os.path.exists(TRIPLET_RESULTS_DIRECTORY): 
@@ -26,7 +26,7 @@ def train_with_triplet_loss(query, epochs, batch_size, margin):
     logger.log(f"Training with {device}.")
 
     CURRENT_DIRECTORY = pathlib.Path(__file__).parent.resolve()
-    EMBEDDINGS_DIRECTORY = os.path.join(CURRENT_DIRECTORY, ".." , f"Triple-CMR-query-{query.value}", f'c-entropy-results-{query.value}-query')
+    EMBEDDINGS_DIRECTORY = os.path.join(CURRENT_DIRECTORY, ".." , f"Triple-CMR-query-{query.value}-dom-{dominating.value}", f'c-entropy-results-{query.value}-query')
 
     # Load your embeddings
     query_embeddings = np.load(os.path.join(EMBEDDINGS_DIRECTORY, f"{query.value}_embeddings_train.npy"), allow_pickle=True).item()
@@ -60,6 +60,8 @@ def train_with_triplet_loss(query, epochs, batch_size, margin):
     # Initialize max MAP values to get best MAP results during training
     max_query2fused = 0.0
     max_fused2query = 0.0
+    max_MAP_total = 0.0
+    result_epoch = 0
 
     # Start training loop
     for epoch in range(epochs):
@@ -106,19 +108,27 @@ def train_with_triplet_loss(query, epochs, batch_size, margin):
             # Evaluate embeddings with validation dataset
             MAP_fused2query, MAP_query2fused = evaluate(new_query_embeddings_test, new_fused_embeddings_test, new_query_embeddings, new_fused_embeddings)
             
-            if MAP_fused2query > max_fused2query:
+            if (MAP_fused2query + MAP_query2fused) > max_MAP_total:
                 max_fused2query = MAP_fused2query
-                best_map_pairs['MAP_pairs'].append((epoch, MAP_fused2query, MAP_query2fused))
-                np.save('{}/trained_query_embeddings_{}.npy'.format(TRIPLET_RESULTS_DIRECTORY, epoch), new_query_embeddings)
-                np.save('{}/trained_fused_embeddings_{}.npy'.format(TRIPLET_RESULTS_DIRECTORY, epoch), new_fused_embeddings)
-                torch.save(model.state_dict(), f"{TRIPLET_RESULTS_DIRECTORY}/model_best_fused2query.pth")
-                
-            if MAP_query2fused > max_query2fused:
                 max_query2fused = MAP_query2fused
                 best_map_pairs['MAP_pairs'].append((epoch, MAP_fused2query, MAP_query2fused))
                 np.save('{}/trained_query_embeddings_{}.npy'.format(TRIPLET_RESULTS_DIRECTORY, epoch), new_query_embeddings)
                 np.save('{}/trained_fused_embeddings_{}.npy'.format(TRIPLET_RESULTS_DIRECTORY, epoch), new_fused_embeddings)
-                torch.save(model.state_dict(), f"{TRIPLET_RESULTS_DIRECTORY}/model_best_query2fused.pth")
+                torch.save(model.state_dict(), f"{TRIPLET_RESULTS_DIRECTORY}/triplet_model_best.pth")
+                result_epoch = epoch
+            # if MAP_fused2query > max_fused2query:
+            #     max_fused2query = MAP_fused2query
+            #     best_map_pairs['MAP_pairs'].append((epoch, MAP_fused2query, MAP_query2fused))
+            #     np.save('{}/trained_query_embeddings_{}.npy'.format(TRIPLET_RESULTS_DIRECTORY, epoch), new_query_embeddings)
+            #     np.save('{}/trained_fused_embeddings_{}.npy'.format(TRIPLET_RESULTS_DIRECTORY, epoch), new_fused_embeddings)
+            #     torch.save(model.state_dict(), f"{TRIPLET_RESULTS_DIRECTORY}/model_best_fused2query.pth")
+                
+            # if MAP_query2fused > max_query2fused:
+            #     max_query2fused = MAP_query2fused
+            #     best_map_pairs['MAP_pairs'].append((epoch, MAP_fused2query, MAP_query2fused))
+            #     np.save('{}/trained_query_embeddings_{}.npy'.format(TRIPLET_RESULTS_DIRECTORY, epoch), new_query_embeddings)
+            #     np.save('{}/trained_fused_embeddings_{}.npy'.format(TRIPLET_RESULTS_DIRECTORY, epoch), new_fused_embeddings)
+            #     torch.save(model.state_dict(), f"{TRIPLET_RESULTS_DIRECTORY}/model_best_query2fused.pth")
 
             # Add the results to the map
             results_map['fused2query'].append(MAP_fused2query)
@@ -147,10 +157,11 @@ def train_with_triplet_loss(query, epochs, batch_size, margin):
     logger.log('MAP Fused to Query: {}'.format(max_fused2query))
     logger.log('MAP Query to Fused: {}'.format(max_query2fused))
 
-    with open(f"{TRIPLET_RESULTS_DIRECTORY}/best_results.txt", "w") as file:
+    with open(f"{TRIPLET_RESULTS_DIRECTORY}/MAP_validation_results.txt", "w") as file:
         # Write the user's input to the file
-        file.write(f"\nMAP Fused to Query: {max_fused2query}")
-        file.write(f"\nMAP Query to Fused: {max_query2fused}")
+        file.write(f"\n Validation MAP Fused to Query: {max_fused2query}")
+        file.write(f"\n Validation MAP Query to Fused: {max_query2fused}")
+        file.write(f"\n Saved at Epoch: {result_epoch}")
 
     # Plot the triplet loss
     plt.figure(figsize=(12,6))
