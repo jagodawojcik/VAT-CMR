@@ -112,8 +112,8 @@ def train_with_triplet_loss(query, dominating, epochs, batch_size, margin):
                 max_fused2query = MAP_fused2query
                 max_query2fused = MAP_query2fused
                 best_map_pairs['MAP_pairs'].append((epoch, MAP_fused2query, MAP_query2fused))
-                np.save('{}/trained_query_embeddings_{}.npy'.format(TRIPLET_RESULTS_DIRECTORY, epoch), new_query_embeddings)
-                np.save('{}/trained_fused_embeddings_{}.npy'.format(TRIPLET_RESULTS_DIRECTORY, epoch), new_fused_embeddings)
+                np.save('{}/triplet_trained_retrieval_query_embeddings.npy'.format(TRIPLET_RESULTS_DIRECTORY), new_query_embeddings)
+                np.save('{}/triplet_trained_retrieval_fused_embeddings'.format(TRIPLET_RESULTS_DIRECTORY), new_fused_embeddings)
                 torch.save(model.state_dict(), f"{TRIPLET_RESULTS_DIRECTORY}/triplet_model_best.pth")
                 result_epoch = epoch
             # if MAP_fused2query > max_fused2query:
