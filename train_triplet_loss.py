@@ -95,7 +95,7 @@ def train_with_triplet_loss(query, dominating, epochs, batch_size, margin):
 
         avg_loss = total_loss / len(triplet_dataloader)
         triplet_loss_save['triplet_loss'].append(avg_loss)
-        logger.log('Epoch [{}/{}], Loss: {:.4f}'.format(epoch+1, epochs, avg_loss))
+        # logger.log('Epoch [{}/{}], Loss: {:.4f}'.format(epoch+1, epochs, avg_loss))
 
         if epoch % 100 == 0:
             new_query_embeddings = {k: model(torch.tensor(v, device=device)).detach().cpu().numpy() for k, v in query_embeddings.items()}
