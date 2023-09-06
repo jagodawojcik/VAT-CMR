@@ -99,7 +99,7 @@ def test_set_performance_evaluate(query, dominating_modality):
 
     RESULTS_DIRECTORY = f'Triple-CMR-query-{query.value}-dom-{dominating_modality.value}'
 
-    with open(f"{RESULTS_DIRECTORY}/information.txt", "a") as file:
+    with open(f"{RESULTS_DIRECTORY}/result.txt", "w") as file:
         file.write(f"MAP Query Modality to Fused: {MAP_query2fused}")
         file.write(f"MAP Fused to Initial Query: {MAP_fused2query}")
         
