@@ -1,4 +1,4 @@
-# Triple-CMR
+# VAT-CMR
 
 A Deep Neural Network model accepting three modality-data as input. It is proposed as a solution to the problem of information retrieval in the context of three robotic sensory inputs: visual, auditory, and tactile.
 
