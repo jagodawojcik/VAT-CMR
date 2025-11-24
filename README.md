@@ -5,7 +5,7 @@ This repository contains a Deep Neural Network (DNN) model designed for multimod
 - **Visual and Tactile Data**: Represented by RGB images (.png).
 - **Auditory Data**: Stored as .wav files.
 
-The full dataset is available [here](https://drive.google.com/drive/folders/1tUKbRt5QgVkjYPtqwllNBinv4hjf9rzW?usp=drive_link).
+The full dataset is available [here](https://drive.google.com/file/d/1aZO-0g0_yagWdIMOv-AaAEXyPlnm3oT4/view?usp=sharing).
 
 ### Training Stages
 1. **Initial Training**: The model is initially trained using a cross-entropy loss function. Each modality (visual, auditory, tactile) follows a separate pathway in the early layers. Specifically, we use a ResNet-50 architecture for image data and a 1D-CNN for audio data.
